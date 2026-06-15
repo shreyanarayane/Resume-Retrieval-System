@@ -1,0 +1,26 @@
+[
+  {
+    "candidate_id": "c1",
+    "name": "Asha Verma",
+    "current_role": "Machine Learning Engineer",
+    "experience_years": 4,
+    "skills": [
+      {"name": "Data Science", "proficiency": "advanced", "endorsements": 9, "duration_months": 42},
+      {"name": "FAISS", "proficiency": "intermediate", "endorsements": 5, "duration_months": 18},
+      {"name": "Python", "proficiency": "advanced", "endorsements": 18, "duration_months": 48}
+    ],
+    "projects": "Built semantic search and candidate ranking pipelines using embeddings and vector search.",
+    "platform_activity": "Active in ML discussions and open source notebooks."
+  },
+  {
+    "candidate_id": "c2",
+    "name": "Rahul Mehta",
+    "current_role": "SEO Analyst",
+    "experience_years": 5,
+    "skills": [
+      {"name": "SEO", "proficiency": "advanced", "endorsements": 14, "duration_months": 50},
+      {"name": "Content Strategy", "proficiency": "intermediate", "endorsements": 8, "duration_months": 24}
+    ],
+    "projects": "Led content audits and keyword optimization for ecommerce sites."
+  }
+]

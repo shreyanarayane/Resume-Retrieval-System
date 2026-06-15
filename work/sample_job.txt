@@ -1,0 +1,1 @@
+We need a Machine Learning Engineer who can build semantic search, vector retrieval, candidate ranking systems, and Python data pipelines. Experience with embeddings, FAISS, and explainable AI ranking is valuable.
