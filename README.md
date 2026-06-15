@@ -1,6 +1,14 @@
 # RecruiterFit AI
 
-CPU-only candidate ranking system for the Redrob hackathon. The submitted ranking path does not use hosted LLM APIs, GPUs, or network calls during ranking.
+Recruiter AI is an intelligent candidate retrieval and ranking system that analyzes job descriptions and resumes to identify the most relevant talent. By combining semantic understanding, skill matching, and contextual reasoning, it delivers accurate, explainable, and efficient candidate recommendations while running entirely on local CPU resources without relying on external APIs during inference.
+
+
+## What Our Solution Do?
+
+Read a job description and actually understand what the role needs — not just pull out words.
+Look at the full picture — career history, skills, behavioral signals, platform activity — and figure out who genuinely fits.
+Deliver a shortlist that a recruiter can trust.
+
 
 ## Approach
 
@@ -55,7 +63,7 @@ The first run may create cached embeddings. Later runs reuse the cache and are m
 The output CSV is:
 
 ```text
-outputs/ranked_candidates.csv
+outputs/final_top_100_with_reasoning.csv
 ```
 
 Columns match the required spec:
