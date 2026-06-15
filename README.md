@@ -53,7 +53,7 @@ data/raw/job_description.docx
 ## Run
 
 ```bash
-python -m src.main --candidates data/raw/candidates.jsonl --job data/raw/job_description.docx --output outputs/ranked_candidates.csv --top-k 1000
+python -m src.main --candidates data/raw/candidates.jsonl --job data/raw/job_description.docx --output outputs/final_top_100_with_reasoning.csv --top-k 1000
 ```
 
 The first run may create cached embeddings. Later runs reuse the cache and are much faster.
