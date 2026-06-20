@@ -1,6 +1,4 @@
 from pathlib import Path
-import hashlib
-import json
 
 import faiss
 import numpy as np
@@ -27,67 +25,20 @@ def build_faiss_index(embeddings: np.ndarray) -> faiss.Index:
     index = faiss.IndexFlatIP(embeddings.shape[1])
     index.add(embeddings)
     return index
-
-
-def candidate_cache_key(candidates: pd.DataFrame, model_name: str) -> str:
-    hasher = hashlib.sha256()
-    hasher.update(model_name.encode("utf-8"))
-    for candidate_id, profile_text in zip(candidates["candidate_id"], candidates["profile_text"]):
-        hasher.update(str(candidate_id).encode("utf-8", errors="ignore"))
-        hasher.update(b"\0")
-        hasher.update(str(profile_text).encode("utf-8", errors="ignore"))
-        hasher.update(b"\0")
-    return hasher.hexdigest()[:16]
-
-
-def load_or_create_candidate_embeddings(
-    candidates: pd.DataFrame,
-    model: SentenceTransformer,
-    model_name: str,
-    cache_dir: str | Path = "data/processed",
-) -> np.ndarray:
-    cache_dir = Path(cache_dir)
-    cache_dir.mkdir(parents=True, exist_ok=True)
-    key = candidate_cache_key(candidates, model_name)
-    embeddings_path = cache_dir / f"candidate_embeddings_{key}.npy"
-    metadata_path = cache_dir / f"candidate_embeddings_{key}.json"
-
-    if embeddings_path.exists():
-        embeddings = np.load(embeddings_path)
-        if embeddings.shape[0] == len(candidates):
-            print(f"Loaded cached candidate embeddings: {embeddings_path}")
-            return embeddings.astype("float32")
-
-    print("Creating candidate embeddings. This is slow only the first time for this processed file.")
-    embeddings = embed_texts(model, candidates["profile_text"].tolist())
-    np.save(embeddings_path, embeddings)
-    metadata_path.write_text(
-        json.dumps(
-            {
-                "model_name": model_name,
-                "candidate_count": len(candidates),
-                "embedding_shape": list(embeddings.shape),
-                "cache_key": key,
-            },
-            indent=2,
-        ),
-        encoding="utf-8",
-    )
-    print(f"Saved candidate embeddings cache: {embeddings_path}")
-    return embeddings
-
-
+    
 def retrieve_top_k(
     candidates: pd.DataFrame,
     job_description: str,
     top_k: int = 1000,
     model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
-    cache_dir: str | Path = "data/processed",
     tfidf_prefilter_k: int | None = 10000,
 ) -> pd.DataFrame:
     candidates = tfidf_prefilter_candidates(candidates, job_description, top_n=tfidf_prefilter_k)
     model = load_embedding_model(model_name)
-    candidate_embeddings = load_or_create_candidate_embeddings(candidates, model, model_name, cache_dir)
+
+    print(f"Embedding {len(candidates)} filtered candidate profiles.")
+    candidate_embeddings = embed_texts(model, candidates["profile_text"].tolist())
+
     index = build_faiss_index(candidate_embeddings)
     job_embedding = embed_texts(model, [job_description], batch_size=1)
     scores, indices = index.search(job_embedding, min(top_k, len(candidates)))
