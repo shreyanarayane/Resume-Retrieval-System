@@ -2,6 +2,11 @@
 
 Recruiter AI is an intelligent candidate retrieval and ranking system that analyzes job descriptions and resumes to identify the most relevant talent. By combining semantic understanding, skill matching, and contextual reasoning, it delivers accurate, explainable, and efficient candidate recommendations while running entirely on local CPU resources without relying on external APIs during inference.
 
+## Problem Statement
+
+Recruiters review hundreds of profiles but still miss strong candidates because keyword filters cannot understand real fit.
+
+The goal is to build an AI ranking system that understands the job description, evaluates the full candidate profile, and recommends the best-fit candidates using semantic relevance, career evidence, skill depth, and behavioral hiring signals.
 
 ## What Our Solution Do?
 
@@ -12,14 +17,16 @@ Deliver a shortlist that a recruiter can trust.
 
 ## Approach
 
-1. Normalize company candidate profiles into one `profile_text` per candidate.
-2. Convert nested skills into structured skill evidence using proficiency, duration, and endorsements.
-3. Convert Redrob behavioral signals into an `activity_score`.
-4. Embed candidate profiles locally with SentenceTransformers.
-5. Cache candidate embeddings under `data/processed/`.
-6. Retrieve the top candidate pool with FAISS.
-7. Rank deterministically using semantic fit, structured skill strength, and Redrob activity.
-8. Export exactly 100 rows in the required submission format.
+1. Load the company candidate file and job description.
+2. Filter clearly inactive or unavailable candidates using Redrob signals.
+3. Apply a fast role-specific prefilter using lexical similarity.
+4. Normalize each candidate into one rich `profile_text`.
+5. Convert nested skills into a `structured_score`.
+6. Convert Redrob behavioral signals into an `activity_score`.
+7. Generate local SentenceTransformer embeddings.
+8. Retrieve the strongest candidate pool using FAISS.
+9. Rank candidates using semantic fit, skill strength, Redrob activity, and JD-specific evidence.
+10. Export exactly 100 rows in the required CSV format.
 
 ## Setup
 
@@ -56,7 +63,6 @@ data/raw/job_description.docx
 python -m src.main --candidates data/raw/candidates.jsonl --job data/raw/job_description.docx --output outputs/final_top_100_with_reasoning.csv --top-k 1000
 ```
 
-The first run may create cached embeddings. Later runs reuse the cache and are much faster.
 
 ## Output
 
@@ -75,18 +81,22 @@ candidate_id,rank,score,reasoning
 ## Architecture
 
 ```text
-candidates.jsonl
+candidates.jsonl + job_description.docx
       ↓
-preprocess schema + skills + Redrob signals
+schema-aware loading
+      ↓
+active candidate filter using Redrob signals
+      ↓
+fast role prefilter using HashingVectorizer
       ↓
 profile_text + structured_score + activity_score
       ↓
-local embeddings + cached .npy file
+SentenceTransformer embeddings
       ↓
-FAISS retrieval top 1000
+FAISS semantic retrieval top-k
       ↓
 deterministic hybrid ranker
       ↓
-top 100 submission CSV
+top-100 submission CSV
 ```
 
