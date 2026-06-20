@@ -99,6 +99,13 @@ deterministic hybrid ranker
       ↓
 top-100 submission CSV
 ```
+## Demo / Sandbox
+
+A hosted demo is available on Hugging Face Spaces:
+```markdown
+Resume Retrieval System: https://huggingface.co/spaces/shreyanarayane/Resume-Retrieval-System
+```
+The demo allows users to run the ranking system on a small candidate sample and generate a ranked CSV output. The full challenge submission is reproduced locally using the command in the setup section.
 
 ## Main Files
 ```
