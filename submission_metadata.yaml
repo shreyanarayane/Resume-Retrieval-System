@@ -1,0 +1,57 @@
+submission:
+  name: RecruiterFit AI
+  track: Intelligent Candidate Discovery & Ranking
+  output_file: outputs/ranked_candidates.csv
+
+team:
+  name: Shreya Narayane
+  members:
+    - name: Shreya Narayane
+      email: shreya.narayane1@gmail.com
+
+primary_contact:
+  name: Shreya Narayane
+  email: shreya.narayane1@gmail.com
+  phone: +91 9970259555
+
+links:
+  github_repository_url: https://github.com/shreyanarayane/Resume-Retrieval-System
+  sandbox_demo_url: https://huggingface.co/spaces/shreyanarayane/Resume-Retrieval-System
+
+ai_tools_declared:
+  - ChatGPT
+  - Codex
+
+methodology_summary: >-
+  RecruiterFit AI uses a CPU-only hybrid ranking pipeline. It filters clearly
+  unavailable candidates with Redrob behavioral signals, performs fast lexical
+  prefiltering, normalizes profile evidence into profile_text plus structured
+  skill/activity scores, retrieves semantically relevant candidates with
+  SentenceTransformer embeddings and FAISS, and applies deterministic
+  JD-specific ranking adjustments before exporting the top 100 candidates.
+
+reproducibility:
+  entrypoint: src.main
+  command: >-
+    python -m src.main --candidates data/raw/candidates.jsonl --job data/raw/job_description.docx --output outputs/ranked_candidates.csv --top-k 100
+  python_version: ">=3.10"
+  hardware: CPU
+  external_apis_required: false
+  gpu_required: false
+  compute_environment_summary:  Windows 10 laptop, Intel CPU, 8GB RAM, Python 3.11
+
+artifacts:
+  candidate_file: data/raw/candidates.jsonl
+  job_description_file: data/raw/job_description.docx
+  generated_submission: outputs/ranked_candidates.csv
+  generated_cache_dir: data/processed
+
+model:
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  vector_index: FAISS IndexFlatIP
+  llm_used_for_final_ranking: false
+
+notes: >-
+  The first run may download the embedding model and create candidate embedding
+  cache files under data/processed. Later runs reuse the cache. The final
+  ranking path is local CPU-only and does not require hosted LLM APIs.
