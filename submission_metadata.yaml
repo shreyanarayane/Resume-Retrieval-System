@@ -44,7 +44,6 @@ artifacts:
   candidate_file: data/raw/candidates.jsonl
   job_description_file: data/raw/job_description.docx
   generated_submission: outputs/ranked_candidates.csv
-  generated_cache_dir: data/processed
 
 model:
   embedding_model: sentence-transformers/all-MiniLM-L6-v2
