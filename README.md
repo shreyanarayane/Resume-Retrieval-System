@@ -14,6 +14,12 @@ Read a job description and actually understand what the role needs — not just 
 Look at the full picture — career history, skills, behavioral signals, platform activity — and figure out who genuinely fits.
 Deliver a shortlist that a recruiter can trust.
 
+- Reads a job description and understands the role requirements beyond keywords.
+- Looks at career history, skills, education, behavioral signals, and platform activity.
+- Filters clearly unavailable candidates using Redrob activity signals.
+- Retrieves semantically relevant candidates using local embeddings and FAISS.
+- Produces an explainable top-100 candidate CSV in the required format.
+
 
 ## Approach
 
@@ -99,6 +105,17 @@ deterministic hybrid ranker
       ↓
 top-100 submission CSV
 ```
+## Scoring Summary
+The base score is then adjusted using:
+```
+JD requirement evidence
+primary title/skill evidence
+work-history implementation evidence
+experience/seniority penalty
+```
+55% semantic fit
+35% structured skill strength
+10% Redrob activity/hireability score
 ## Demo / Sandbox
 
 A hosted demo is available on Hugging Face Spaces:
