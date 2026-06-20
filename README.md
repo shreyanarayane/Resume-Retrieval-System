@@ -100,3 +100,12 @@ deterministic hybrid ranker
 top-100 submission CSV
 ```
 
+## Main Files
+```
+src/main.py        production entry point
+src/preprocess.py  data loading, normalization, Redrob scoring
+src/retrieval.py   embeddings, cache, FAISS retrieval
+src/scoring.py     hybrid ranking and submission writer
+src/io_utils.py    job description reader
+app.py             small-sample Gradio demo
+```
