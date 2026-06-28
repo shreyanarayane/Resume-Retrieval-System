@@ -2,6 +2,8 @@
 
 Recruiter AI is an intelligent candidate retrieval and ranking system that analyzes job descriptions and resumes to identify the most relevant talent. By combining semantic understanding, skill matching, and contextual reasoning, it delivers accurate, explainable, and efficient candidate recommendations while running entirely on local CPU resources without relying on external APIs during inference.
 
+It actually understands the job role and retrive candidated based on it, no bag of words.
+
 ## Problem Statement
 
 Recruiters review hundreds of profiles but still miss strong candidates because keyword filters cannot understand real fit.
